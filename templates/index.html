@@ -1,25 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mech_Merch Leaderboard</title>
-  <link rel="stylesheet" href="/public/css/style.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
   <header>
-    <img src="/public/images/logo.png" alt="Mech_Merch Logo" style="height: 60px; vertical-align: middle;" />
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
   </header>
 
-  <section class="communities">
-    <h2>Top Communities</h2>
-    <div class="community-cards">
-      <div class="comm-card"><img src="/public/images/aircon.png"><p>Air Con</p></div>
-      <div class="comm-card"><img src="/public/images/automobile.png"><p>Automobile</p></div>
-      <div class="comm-card"><img src="/public/images/energy.png"><p>Energy</p></div>
-      <div class="comm-card"><img src="/public/images/manufacturing.png"><p>Manufacturing</p></div>
+  <main class="chart-container">
+    <canvas id="leaderboardChart"></canvas>
+    <div class="cta">
+      <a href="https://bit.ly/mech_merchandise" target="_blank">Purchase Mech Merch</a>
+    </div>
+  </main>
+
+  <section class="community-section">
+    <h2>Representing Communities</h2>
+    <div class="community-grid">
+      {% for img, name in [
+          ('aerospace.png','Aerospace'),
+          ('aircon.png','Air Con'),
+          ('automobile.png','Automobile'),
+          ('energy.png','Energy'),
+          ('manufacturing.png','Manufacturing')] %}
+      <div class="comm-card">
+        <img src="{{ url_for('static', filename='images/' ~ img) }}" alt="{{ name }}">
+        <p>{{ name }}</p>
+      </div>
+      {% endfor %}
     </div>
   </section>
 
@@ -27,73 +41,48 @@
     <h2>Our Models Rocking the Merch</h2>
     <div class="model-strip">
       <div class="model-track">
-        <!-- Using JS template literals instead of EJS -->
-        <script>
-          for (let i = 1; i <= 6; i++) {
-            document.write(`<img src="/public/images/model${i}.jpg" alt="Model ${i}">`);
-          }
-          for (let i = 1; i <= 6; i++) {
-            document.write(`<img src="/public/images/model${i}.jpg" alt="Model ${i}">`);
-          }
-        </script>
+        {% for i in range(1,7)|list + range(1,7)|list %}
+        <img src="{{ url_for('static', filename='images/model' ~ i ~ '.jpg') }}" alt="Model {{ i }}">
+        {% endfor %}
       </div>
     </div>
   </section>
 
-  <section class="leaderboard">
-    <h2>Leaderboard</h2>
-    <canvas id="leaderboardChart" width="800" height="400"></canvas>
-  </section>
+  <footer>&copy; 2025 Mech_Merch</footer>
 
-  <footer>
-    &copy; 2025 Mech_Merch | All rights reserved.
-  </footer>
-
-  <script src="/public/js/chart.js"></script>
+  <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
   <script>
-    fetch("/leaderboard")
-      .then(response => response.json())
-      .then(data => {
-        const ctx = document.getElementById('leaderboardChart').getContext('2d');
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: data.communities,
-            datasets: [{
-              label: 'Number of Purchases',
-              data: data.purchases,
-              backgroundColor: [
-                '#1b1b1b', '#246c9d', '#2f3750',
-                '#237623', '#616977', '#aa4c8f',
-                '#d66b1f', '#0b4f6c', '#2c3539'
-              ],
-              borderRadius: 10,
-              barThickness: 40
-            }]
-          },
-          options: {
-            indexAxis: 'y',
-            responsive: true,
-            plugins: {
-              legend: { display: true },
-              title: {
-                display: true,
-                text: 'Community Purchases',
-                font: { size: 20 }
-              }
+  document.addEventListener('DOMContentLoaded', ()=> {
+    fetch('/leaderboard')
+      .then(r=>r.json())
+      .then(data=>{
+        new Chart(
+          document.getElementById('leaderboardChart').getContext('2d'),
+          {
+            type:'bar',
+            data:{
+              labels: data.communities,
+              datasets:[{
+                data: data.purchases,
+                backgroundColor: ['#1b1b1b','#246c9d','#2f3750','#237623','#616977'],
+                borderRadius:10, barThickness:40
+              }]
             },
-            scales: {
-              x: {
-                ticks: { font: { size: 16 } }
+            options:{
+              indexAxis:'y', responsive:true,
+              plugins:{
+                legend:{display:false},
+                title:{ display:true, text:'Community Purchases', font:{size:20} }
               },
-              y: {
-                ticks: { font: { size: 18, weight: 'bold' } }
+              scales:{
+                x:{ ticks:{font:{size:16}} },
+                y:{ ticks:{font:{size:18,weight:'bold'}} }
               }
             }
           }
-        });
-      })
-      .catch(error => console.error("Error loading leaderboard:", error));
+        );
+      });
+  });
   </script>
 </body>
 </html>
