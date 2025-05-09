@@ -9,12 +9,12 @@ def home():
 
 @app.route('/leaderboard')
 def leaderboard():
-    data_path = os.path.join(app.template_folder, 'data.json')  # Fixed path
+    data_path = os.path.join(app.template_folder, 'data.json')
     try:
         with open(data_path) as f:
             return json.load(f)
     except FileNotFoundError:
-        return {"error": "Data file not found"}, 404
+        return {"error": "data.json not found"}, 404
 
 @app.route('/public/<path:filename>')
 def serve_public(filename):
