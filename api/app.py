@@ -1,34 +1,32 @@
-from flask import Flask, send_from_directory, request, jsonify
-import os
-import json
+# api/app.py
+from flask import Flask, render_template, jsonify, request
+import os, json
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE_FOLDER = os.path.join(BASE_DIR, '../templates')
-STATIC_FOLDER = os.path.join(BASE_DIR, '../public')
+BASE = os.path.dirname(os.path.abspath(__file__))
+TPL  = os.path.join(BASE, '../templates')
+STA  = os.path.join(BASE, '../static')
 
-app = Flask(__name__, static_folder=STATIC_FOLDER, template_folder=TEMPLATE_FOLDER)
+app = Flask(__name__, template_folder=TPL, static_folder=STA)
 
 @app.route('/')
 def home():
-    return send_from_directory(TEMPLATE_FOLDER, 'index.html')
+    return render_template('index.html')
 
 @app.route('/leaderboard')
 def leaderboard():
-    data_path = os.path.join(TEMPLATE_FOLDER, 'data.json')
     try:
-        with open(data_path) as f:
-            data = json.load(f)
-            return jsonify(data)
+        with open(os.path.join(TPL, 'data.json')) as f:
+            return jsonify(json.load(f))
     except FileNotFoundError:
         return jsonify({"error": "data.json not found"}), 404
 
 @app.route('/debug')
 def debug_routes():
     return {
-        "static_files": os.listdir(STATIC_FOLDER),
-        "template_files": os.listdir(TEMPLATE_FOLDER),
-        "data.json_exists": os.path.exists(os.path.join(TEMPLATE_FOLDER, 'data.json')),
-        "current_route": request.path
+        "static": os.listdir(STA),
+        "templates": os.listdir(TPL),
+        "data.json_exists": os.path.exists(os.path.join(TPL, 'data.json')),
+        "route": request.path
     }
 
 if __name__ == '__main__':
