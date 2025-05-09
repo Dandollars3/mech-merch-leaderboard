@@ -1,12 +1,5 @@
-<<<<<<< HEAD
 {
     "communities": ["Aerospace", "Air_Con", "Automobile", "Energy", "Manufacturing"],
     "purchases": [9, 2, 4, 2, 5]
   }
-  
-=======
-{
-    "communities": ["Aerospace", "Air_Con", "Automobile", "Energy", "Manufacturing"],
-    "purchases": [9, 2, 4, 2, 5]
-  }
->>>>>>> 0f36261 (Add data.json to deployment)
+
