@@ -4,13 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mech_Merch Leaderboard</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <!-- CHANGED: Updated CSS path -->
+  <link rel="stylesheet" href="/public/css/style.css" />
 </head>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
 
   <header>
-    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Mech_Merch Logo" style="height: 60px; vertical-align: middle;">
+    <!-- CHANGED: Updated logo path -->
+    <img src="/public/images/logo.png" alt="Mech_Merch Logo" style="height: 60px; vertical-align: middle;">
     <div>Mech_Merch Leaderboard</div>
   </header>
 
@@ -29,31 +31,31 @@
       </svg>
       Refresh Data
     </button>
-  
   </main>
 
   <section class="community-section">
     <h2>Representing Communities</h2>
     <div class="community-grid">
-      <div class="comm-card"><img src="{{ url_for('static', filename='images/aerospace.png') }}"><p>Aerospace</p></div>
-      <div class="comm-card"><img src="{{ url_for('static', filename='images/aircon.png') }}"><p>Air Con</p></div>
-      <div class="comm-card"><img src="{{ url_for('static', filename='images/automobile.png') }}"><p>Automobile</p></div>
-      <div class="comm-card"><img src="{{ url_for('static', filename='images/energy.png') }}"><p>Energy</p></div>
-      <div class="comm-card"><img src="{{ url_for('static', filename='images/manufacturing.png') }}"><p>Manufacturing</p></div>
+      <!-- CHANGED: Updated all community image paths -->
+      <div class="comm-card"><img src="/public/images/aerospace.png"><p>Aerospace</p></div>
+      <div class="comm-card"><img src="/public/images/aircon.png"><p>Air Con</p></div>
+      <div class="comm-card"><img src="/public/images/automobile.png"><p>Automobile</p></div>
+      <div class="comm-card"><img src="/public/images/energy.png"><p>Energy</p></div>
+      <div class="comm-card"><img src="/public/images/manufacturing.png"><p>Manufacturing</p></div>
     </div>
   </section>
   
-
   <section class="models">
     <h2>Our Models Rocking the Merch</h2>
     <div class="model-strip">
       <div class="model-track">
-        {% for i in range(1, 7) %}
-          <img src="{{ url_for('static', filename='images/model' ~ i ~ '.jpg') }}" alt="Model {{ i }}">
-        {% endfor %}
-        {% for i in range(1, 7) %}
-          <img src="{{ url_for('static', filename='images/model' ~ i ~ '.jpg') }}" alt="Model {{ i }}">
-        {% endfor %}
+        <!-- CHANGED: Updated model image paths -->
+        <% for i in range(1, 7) { %>
+          <img src="/public/images/model<%= i %>.jpg" alt="Model <%= i %>">
+        <% } %>
+        <% for i in range(1, 7) { %>
+          <img src="/public/images/model<%= i %>.jpg" alt="Model <%= i %>">
+        <% } %>
       </div>
     </div>
   </section>
@@ -62,9 +64,11 @@
     &copy; 2025 Mech_Merch | All rights reserved.
   </footer>
 
-  <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+  <!-- CHANGED: Updated JavaScript path -->
+  <script src="/public/js/chart.js"></script>
   <script>
-  fetch('http://localhost:5000/leaderboard')
+  // CHANGED: Update API endpoint to relative path
+  fetch('/leaderboard')
     .then(response => response.json())
     .then(data => {
       const ctx = document.getElementById('leaderboardChart').getContext('2d');
