@@ -12,14 +12,15 @@
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/api/app?filename=static/$1",
-      "continue": true
+      "src": "/public/(.*)",
+      "dest": "/public/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      }
     },
     {
       "src": "/(.*)",
-      "dest": "/api/app",
-      "methods": ["GET", "POST"]
+      "dest": "/api/app"
     }
   ]
 }
