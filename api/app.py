@@ -1,46 +1,35 @@
-from flask import Flask, send_from_directory, request, json
+from flask import Flask, send_from_directory, request, jsonify
 import os
-app = Flask(__name__, static_folder="public", template_folder="templates")
+import json
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_FOLDER = os.path.join(BASE_DIR, '../templates')
+STATIC_FOLDER = os.path.join(BASE_DIR, '../public')
+
+app = Flask(__name__, static_folder=STATIC_FOLDER, template_folder=TEMPLATE_FOLDER)
 
 @app.route('/')
 def home():
-    return send_from_directory(app.template_folder, 'index.html')
+    return send_from_directory(TEMPLATE_FOLDER, 'index.html')
 
 @app.route('/leaderboard')
 def leaderboard():
-    data_path = os.path.join(app.template_folder, 'data.json')
+    data_path = os.path.join(TEMPLATE_FOLDER, 'data.json')
     try:
         with open(data_path) as f:
-            return json.load(f)
+            data = json.load(f)
+            return jsonify(data)
     except FileNotFoundError:
-        return {"error": "data.json not found"}, 404
-
-@app.route('/public/<path:filename>')
-def serve_public(filename):
-    return send_from_directory(app.static_folder, filename)
-
-def handler(request):
-    with app.app_context():
-        path = request.path
-        if path.startswith('/public/'):
-            return serve_public(path.split('/public/')[1])
-        if path == '/leaderboard':
-            return leaderboard()
-        response = home()
-        return {
-            "statusCode": 200,
-            "headers": {"Content-Type": "text/html"},
-            "body": response.get_data().decode('utf-8')
-        }
+        return jsonify({"error": "data.json not found"}), 404
 
 @app.route('/debug')
 def debug_routes():
     return {
-        "static_files": os.listdir(app.static_folder),
-        "template_files": os.listdir(app.template_folder),
-        "data.json_exists": os.path.exists(os.path.join(app.template_folder, 'data.json')),
+        "static_files": os.listdir(STATIC_FOLDER),
+        "template_files": os.listdir(TEMPLATE_FOLDER),
+        "data.json_exists": os.path.exists(os.path.join(TEMPLATE_FOLDER, 'data.json')),
         "current_route": request.path
     }
 
 if __name__ == '__main__':
-    app.run(port=5000)  # Changed to 5000 to avoid Vercel conflict
+    app.run(debug=True, port=5000)
