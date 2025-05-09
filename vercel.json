@@ -6,35 +6,17 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "50mb",
-        "includeFiles": "templates/**",
-        "suppressStreams": true
+        "includeFiles": [
+          "templates/**",
+          "public/**"
+        ]
       }
     }
   ],
   "routes": [
     {
-      "src": "/public/css/(.*\\.css)",
-      "dest": "/public/css/$1"
-    },
-    {
-      "src": "/public/js/(.*\\.js)",
-      "dest": "/public/js/$1"
-    },
-    {
-      "src": "/public/images/(.*\\.(png|jpg|jpeg|gif|svg|ico))",
-      "dest": "/public/images/$1"
-    },
-    {
-      "src": "/static/(.*)",
-      "status": 301,
-      "headers": {
-        "Location": "/public/$1"
-      }
-    },
-    {
       "src": "/(.*)",
-      "dest": "/api/app",
-      "methods": ["GET", "POST", "OPTIONS"]
+      "dest": "/api/app"
     }
   ]
 }
