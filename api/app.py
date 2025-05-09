@@ -1,21 +1,21 @@
-from flask import Flask, send_from_directory, request
+from flask import Flask, send_from_directory
 import os
 
-app = Flask(__name__, static_folder="../static", template_folder="../templates")
+app = Flask(__name__, static_folder="../public", template_folder="../templates")
 
 @app.route('/')
 def home():
     return send_from_directory(app.template_folder, 'index.html')
 
-@app.route('/static/<path:filename>')
-def serve_static(filename):
+@app.route('/public/<path:filename>')
+def serve_public(filename):
     return send_from_directory(app.static_folder, filename)
 
 def handler(request):
     with app.app_context():
         path = request.path
-        if path.startswith('/static/'):
-            return serve_static(path.split('/static/')[1])
+        if path.startswith('/public/'):
+            return serve_public(path.split('/public/')[1])
         response = home()
         return {
             "statusCode": 200,
@@ -23,6 +23,5 @@ def handler(request):
             "body": response.get_data().decode('utf-8')
         }
 
-# For local testing
 if __name__ == '__main__':
     app.run(port=3000)
