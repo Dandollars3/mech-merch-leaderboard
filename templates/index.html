@@ -4,112 +4,96 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mech_Merch Leaderboard</title>
-  <!-- CHANGED: Updated CSS path -->
   <link rel="stylesheet" href="/public/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
 
   <header>
-    <!-- CHANGED: Updated logo path -->
-    <img src="/public/images/logo.png" alt="Mech_Merch Logo" style="height: 60px; vertical-align: middle;">
-    <div>Mech_Merch Leaderboard</div>
+    <img src="/public/images/logo.png" alt="Mech_Merch Logo" style="height: 60px; vertical-align: middle;" />
   </header>
 
-  <main class="chart-container">
-    <canvas id="leaderboardChart"></canvas>
-
-    <div class="cta">
-      <a href="https://bit.ly/mech_merchandise" target="_blank">Purchase Mech Merch</a>
-    </div>
-
-    <button id="refreshBtn" class="refresh-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="23 4 23 10 17 10"></polyline>
-        <polyline points="1 20 1 14 7 14"></polyline>
-        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-      </svg>
-      Refresh Data
-    </button>
-  </main>
-
-  <section class="community-section">
-    <h2>Representing Communities</h2>
-    <div class="community-grid">
-      <!-- CHANGED: Updated all community image paths -->
-      <div class="comm-card"><img src="/public/images/aerospace.png"><p>Aerospace</p></div>
+  <section class="communities">
+    <h2>Top Communities</h2>
+    <div class="community-cards">
       <div class="comm-card"><img src="/public/images/aircon.png"><p>Air Con</p></div>
       <div class="comm-card"><img src="/public/images/automobile.png"><p>Automobile</p></div>
       <div class="comm-card"><img src="/public/images/energy.png"><p>Energy</p></div>
       <div class="comm-card"><img src="/public/images/manufacturing.png"><p>Manufacturing</p></div>
     </div>
   </section>
-  
+
   <section class="models">
     <h2>Our Models Rocking the Merch</h2>
     <div class="model-strip">
       <div class="model-track">
-        <!-- CHANGED: Updated model image paths -->
-        <% for i in range(1, 7) { %>
-          <img src="/public/images/model<%= i %>.jpg" alt="Model <%= i %>">
-        <% } %>
-        <% for i in range(1, 7) { %>
-          <img src="/public/images/model<%= i %>.jpg" alt="Model <%= i %>">
-        <% } %>
+        <!-- Using JS template literals instead of EJS -->
+        <script>
+          for (let i = 1; i <= 6; i++) {
+            document.write(`<img src="/public/images/model${i}.jpg" alt="Model ${i}">`);
+          }
+          for (let i = 1; i <= 6; i++) {
+            document.write(`<img src="/public/images/model${i}.jpg" alt="Model ${i}">`);
+          }
+        </script>
       </div>
     </div>
+  </section>
+
+  <section class="leaderboard">
+    <h2>Leaderboard</h2>
+    <canvas id="leaderboardChart" width="800" height="400"></canvas>
   </section>
 
   <footer>
     &copy; 2025 Mech_Merch | All rights reserved.
   </footer>
 
-  <!-- CHANGED: Updated JavaScript path -->
   <script src="/public/js/chart.js"></script>
   <script>
-  // CHANGED: Update API endpoint to relative path
-  fetch('/leaderboard')
-    .then(response => response.json())
-    .then(data => {
-      const ctx = document.getElementById('leaderboardChart').getContext('2d');
-      const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: data.communities,
-          datasets: [{
-            label: 'Number of Purchases',
-            data: data.purchases,
-            backgroundColor: [
-              '#1b1b1b', '#246c9d', '#2f3750',
-              '#237623', '#616977', '#aa4c8f',
-              '#d66b1f', '#0b4f6c', '#2c3539'
-            ],
-            borderRadius: 10,
-            barThickness: 40
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          plugins: {
-            legend: { display: true },
-            title: {
-              display: true,
-              text: 'Community Purchases',
-              font: { size: 20 }
-            }
+    fetch("/leaderboard")
+      .then(response => response.json())
+      .then(data => {
+        const ctx = document.getElementById('leaderboardChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: data.communities,
+            datasets: [{
+              label: 'Number of Purchases',
+              data: data.purchases,
+              backgroundColor: [
+                '#1b1b1b', '#246c9d', '#2f3750',
+                '#237623', '#616977', '#aa4c8f',
+                '#d66b1f', '#0b4f6c', '#2c3539'
+              ],
+              borderRadius: 10,
+              barThickness: 40
+            }]
           },
-          scales: {
-            x: {
-              ticks: { font: { size: 16 } }
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+              legend: { display: true },
+              title: {
+                display: true,
+                text: 'Community Purchases',
+                font: { size: 20 }
+              }
             },
-            y: {
-              ticks: { font: { size: 18, weight: 'bold' } }
+            scales: {
+              x: {
+                ticks: { font: { size: 16 } }
+              },
+              y: {
+                ticks: { font: { size: 18, weight: 'bold' } }
+              }
             }
           }
-        }
-      });
-    });
-  </script>     
+        });
+      })
+      .catch(error => console.error("Error loading leaderboard:", error));
+  </script>
 </body>
 </html>
