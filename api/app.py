@@ -25,3 +25,11 @@ def handler(request):
 
 if __name__ == '__main__':
     app.run(port=3000)
+
+@app.route('/debug')
+def debug_routes():
+    return {
+        "static_files": os.listdir('../public'),
+        "template_files": os.listdir('../templates'),
+        "current_route": request.path
+    }
