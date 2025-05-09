@@ -9,7 +9,7 @@ def home():
 
 @app.route('/public/<path:filename>')
 def serve_public(filename):
-    return send_from_directory(app.static_folder, filename)
+    return send_from_directory('../public', filename)
 
 def handler(request):
     with app.app_context():
