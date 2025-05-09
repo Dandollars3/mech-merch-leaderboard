@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mech_Merch Leaderboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<body>
+
+  <header>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Mech_Merch Logo" style="height: 60px; vertical-align: middle;">
+    <div>Mech_Merch Leaderboard</div>
+  </header>
+
+  <main class="chart-container">
+    <canvas id="leaderboardChart"></canvas>
+
+    <div class="cta">
+      <a href="https://bit.ly/mech_merchandise" target="_blank">Purchase Mech Merch</a>
+    </div>
+
+    <button id="refreshBtn" class="refresh-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <polyline points="1 20 1 14 7 14"></polyline>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+      </svg>
+      Refresh Data
+    </button>
+  
+  </main>
+
+  <section class="community-section">
+    <h2>Representing Communities</h2>
+    <div class="community-grid">
+      <div class="comm-card"><img src="{{ url_for('static', filename='images/aerospace.png') }}"><p>Aerospace</p></div>
+      <div class="comm-card"><img src="{{ url_for('static', filename='images/aircon.png') }}"><p>Air Con</p></div>
+      <div class="comm-card"><img src="{{ url_for('static', filename='images/automobile.png') }}"><p>Automobile</p></div>
+      <div class="comm-card"><img src="{{ url_for('static', filename='images/energy.png') }}"><p>Energy</p></div>
+      <div class="comm-card"><img src="{{ url_for('static', filename='images/manufacturing.png') }}"><p>Manufacturing</p></div>
+    </div>
+  </section>
+  
+
+  <section class="models">
+    <h2>Our Models Rocking the Merch</h2>
+    <div class="model-strip">
+      <div class="model-track">
+        {% for i in range(1, 7) %}
+          <img src="{{ url_for('static', filename='images/model' ~ i ~ '.jpg') }}" alt="Model {{ i }}">
+        {% endfor %}
+        {% for i in range(1, 7) %}
+          <img src="{{ url_for('static', filename='images/model' ~ i ~ '.jpg') }}" alt="Model {{ i }}">
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Mech_Merch | All rights reserved.
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+  <script>
+  fetch('http://localhost:5000/leaderboard')
+    .then(response => response.json())
+    .then(data => {
+      const ctx = document.getElementById('leaderboardChart').getContext('2d');
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.communities,
+          datasets: [{
+            label: 'Number of Purchases',
+            data: data.purchases,
+            backgroundColor: [
+              '#1b1b1b', '#246c9d', '#2f3750',
+              '#237623', '#616977', '#aa4c8f',
+              '#d66b1f', '#0b4f6c', '#2c3539'
+            ],
+            borderRadius: 10,
+            barThickness: 40
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          plugins: {
+            legend: { display: true },
+            title: {
+              display: true,
+              text: 'Community Purchases',
+              font: { size: 20 }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { font: { size: 16 } }
+            },
+            y: {
+              ticks: { font: { size: 18, weight: 'bold' } }
+            }
+          }
+        }
+      });
+    });
+  </script>     
+</body>
+</html>
