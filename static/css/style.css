@@ -88,6 +88,25 @@ main, .chart-container, .models, .community-section, .cta {
   }
 }
 
+.chart-wrapper {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  padding: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .chart-wrapper {
+    padding: 0 10px;
+  }
+
+  svg,
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
 
   /* CTA Section */
   .cta {
