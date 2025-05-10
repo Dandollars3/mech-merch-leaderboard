@@ -1,29 +1,26 @@
 /* Reset and fonts */
 body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #FAF8F6;
-    color: #333;
-    line-height: 1.6;
-  }  
-  /* Header */
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #FAF8F6;
+  color: #333;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Header */
 header {
   background: linear-gradient(90deg, #EF7F36, #FBAF36);
   color: white;
-  padding: 20px 20px; /* Reduced from 30px */
-  text-align: center;
-  font-size: 28px;     /* Slightly smaller */
-  font-weight: bold;
-  letter-spacing: 1.5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-header {
-  height: 100px;
   padding: 10px 20px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 header img {
@@ -31,61 +28,28 @@ header img {
   max-width: 100%;
 }
 
-@media screen and (max-width: 768px) {
-  header {
-    flex-direction: column;
-    height: auto;
-  }
-
-  header img {
-    height: auto;
-    width: 70%;
-    max-width: 250px;
-  }
-}
-
-header img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Center layout */
-body {
-  text-align: center;
-}
-
+/* Main layout containers */
 main, .chart-container, .models, .community-section, .cta {
   margin: 0 auto;
   max-width: 900px;
 }
 
-  /* Chart container */
-  .chart-container {
-    max-width: 900px;
-    margin: 40px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  }
-
+/* Chart container */
 .chart-container {
-  width: 100%;
-  max-width: 600px;
-  margin: auto;
+  max-width: 900px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  position: relative;
+  min-height: 600px;
 }
 
-@media screen and (max-width: 768px) {
-  .chart-container {
-    max-width: 90%;
-    height: auto;
-  }
-
-  .chart-container canvas,
-  .chart-container svg {
-    width: 100% !important;
-    height: auto !important;
-  }
+#leaderboardChart {
+  width: 100% !important;
+  height: 500px !important;
+  margin: 20px 0;
 }
 
 .chart-wrapper {
@@ -95,41 +59,29 @@ main, .chart-container, .models, .community-section, .cta {
   padding: 10px;
 }
 
-@media screen and (max-width: 600px) {
-  .chart-wrapper {
-    padding: 0 10px;
-  }
-
-  svg,
-  canvas {
-    width: 100% !important;
-    height: auto !important;
-  }
+/* CTA Section */
+.cta {
+  text-align: center;
+  margin-top: 30px;
 }
 
+.cta a {
+  background-color: #EBC536;
+  color: #333;
+  padding: 15px 30px;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 12px;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+  transition: background 0.3s ease;
+}
 
-  /* CTA Section */
-  .cta {
-    text-align: center;
-    margin-top: 30px;
-  }
-  
-  .cta a {
-    background-color: #EBC536;
-    color: #333;
-    padding: 15px 30px;
-    text-decoration: none;
-    font-size: 18px;
-    border-radius: 12px;
-    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
-    transition: background 0.3s ease;
-  }
-  
-  .cta a:hover {
-    background-color: #FBAF36;
-  }
-  
-  .community-section {
+.cta a:hover {
+  background-color: #FBAF36;
+}
+
+/* Community Section */
+.community-section {
   padding: 3rem 2rem;
   background-color: #fff8f0;
   text-align: center;
@@ -170,163 +122,57 @@ main, .chart-container, .models, .community-section, .cta {
   color: #333;
 }
 
-  /* Models Section */
-  .models {
-    background-color: #EDC9A2;
-    padding: 40px 20px;
-    text-align: center;
-  }
-  
-  .models h2 {
-    font-size: 28px;
-    margin-bottom: 30px;
-    color: #222;
-  }
-  
-  .model-slider {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    padding: 10px;
-    scroll-behavior: smooth;
-  }
-  
-  .model-slider img {
-    height: 300px;
-    border-radius: 12px;
-    flex-shrink: 0;
-    transition: transform 0.3s ease;
-  }
-  
-  .model-slider img:hover {
-    transform: scale(1.05);
-  }
-  
-  /* Hide scrollbar */
-  .model-slider::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Footer */
-  footer {
-    background-color: #FBAF36;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-    font-size: 14px;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .chart-container {
-      margin: 20px;
-      padding: 20px;
-    }
-  
-    .model-slider img {
-      height: 220px;
-    }
-  
-    .cta a {
-      padding: 12px 24px;
-      font-size: 16px;
-    }
-  }
-  .models {
-    padding: 3rem 1rem;
-    background-color: #fff;
-    text-align: center;
-  }
-  
-  .models h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    color: #333;
-  }
-  
-  .model-strip {
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-  }
-  
-  .model-track {
-    display: flex;
-    width: calc(200%); /* double width to loop images */
-    animation: scrollModels 20s linear infinite;
-  }
-  
-  .model-track img {
-    width: 200px;
-    height: auto;
-    margin: 0 10px;
-    border-radius: 16px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s;
-  }
-  
-  .model-track img:hover {
-    transform: scale(1.05);
-  }
-  
-  @keyframes scrollModels {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-  .model-strip {
-    overflow: hidden;
-    position: relative;
-    background-color: #fff4ea;
-    border-top: 2px solid #ef7f36;
-    border-bottom: 2px solid #ef7f36;
-    padding: 1rem 0;
-  }
-  
-  .model-track {
-    display: flex;
-    width: calc(250px * 12); /* Adjust to number of images × width */
-    animation: scrollModels 60s linear infinite;
-  }
-  
-  .model-track img {
-    height: 200px;         /* Standard height */
-    width: auto;           /* Maintain aspect ratio */
-    margin-right: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .model-track img:hover {
-    transform: scale(1.05);
-  }
-  
-  @keyframes scrollModels {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
-  /* Chart specific styles */
-#leaderboardChart {
-  width: 100% !important;
-  height: 500px !important;
-  margin: 20px 0;
+/* Models Section */
+.models {
+  padding: 3rem 1rem;
+  background-color: #fff;
+  text-align: center;
 }
 
-.chart-container {
+.models h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.model-strip {
+  overflow: hidden;
   position: relative;
-  min-height: 600px;
-  padding: 2rem;
+  background-color: #fff4ea;
+  border-top: 2px solid #ef7f36;
+  border-bottom: 2px solid #ef7f36;
+  padding: 1rem 0;
 }
 
+.model-track {
+  display: flex;
+  width: calc(250px * 12);
+  animation: scrollModels 60s linear infinite;
+}
+
+.model-track img {
+  height: 200px;
+  width: auto;
+  margin-right: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.model-track img:hover {
+  transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+  background-color: #FBAF36;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+}
+
+/* Refresh Button */
 .refresh-btn {
   display: flex;
   align-items: center;
@@ -356,19 +202,40 @@ main, .chart-container, .models, .community-section, .cta {
   to { transform: rotate(360deg); }
 }
 
-@media (max-width: 600px) {
+@keyframes scrollModels {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
   header {
+    height: auto;
     padding: 15px 10px;
+    flex-direction: column;
+    gap: 15px;
     font-size: 22px;
   }
 
-  .chart-container, .models, .community-section {
-    padding: 15px 10px;
-    margin: 10px;
+  header img {
+    width: 70%;
+    max-width: 250px;
+    height: auto;
   }
 
-  .model-slider img,
-  .model-track img {
+  .chart-container {
+    max-width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    min-height: 400px;
+  }
+
+  #leaderboardChart {
+    height: 400px !important;
+  }
+
+  .model-track img,
+  .model-slider img {
     height: 180px;
   }
 
@@ -377,37 +244,38 @@ main, .chart-container, .models, .community-section, .cta {
     font-size: 16px;
   }
 
-  #leaderboardChart {
-    height: 400px !important;
-  }
-
   .refresh-btn {
     flex-direction: column;
     font-size: 14px;
     padding: 8px 16px;
   }
+
+  .community-grid {
+    gap: 1rem;
+  }
+
+  .comm-card {
+    width: 120px;
+  }
 }
-@media screen and (max-width: 768px) {
-  header {
-    height: auto;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+@media (max-width: 480px) {
+  .chart-container {
+    padding: 15px;
+    min-height: 350px;
   }
 
-  header img {
-    width: 70%;
-    max-width: 250px;
+  #leaderboardChart {
+    height: 300px !important;
   }
 
-  h1 {
-    font-size: 1.2rem;
-    text-align: center;
+  .community-section,
+  .models {
+    padding: 2rem 1rem;
   }
 
-  .content {
-    flex-direction: column;
-    align-items: center;
+  .model-track img {
+    height: 150px;
+    margin-right: 15px;
   }
 }
