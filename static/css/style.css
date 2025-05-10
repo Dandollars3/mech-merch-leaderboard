@@ -8,7 +8,7 @@ body {
   text-align: center;
 }
 
-/* Header */
+/* Header - Mobile Fix Added */
 header {
   background: linear-gradient(90deg, #EF7F36, #FBAF36);
   color: white;
@@ -34,7 +34,7 @@ main, .chart-container, .models, .community-section, .cta {
   max-width: 900px;
 }
 
-/* Chart container */
+/* Chart container - Mobile Fix Added */
 .chart-container {
   max-width: 900px;
   margin: 40px auto;
@@ -52,67 +52,33 @@ main, .chart-container, .models, .community-section, .cta {
   margin: 20px 0;
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  header {
-    height: auto;
-    padding: 15px 10px;
-    flex-direction: column;
-    gap: 15px;
-    font-size: 22px;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
-  header img {
-    width: 60%;
-    max-width: 200px;
-    height: auto;
-    margin: 0 auto;
-  }
-
-  .chart-container {
-    max-width: 95%;
-    margin: 15px auto;
-    padding: 15px !important;
-    min-height: 75vh;
-    border-radius: 12px !important;
-  }
-
-  #leaderboardChart {
-    height: auto !important;
-    min-height: 65vh;
-    width: 100% !important;
-    margin: 0;
-  }
-
-  .model-track img,
-  .model-slider img {
-    height: 180px;
-  }
-
-  .cta a {
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-
-  .refresh-btn {
-    flex-direction: column;
-    font-size: 14px;
-    padding: 8px 16px;
-  }
-
-  .community-grid {
-    gap: 1rem;
-  }
-
-  .comm-card {
-    width: 120px;
-  }
+.chart-wrapper {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  padding: 10px;
 }
 
-/* ... (Keep all other existing CSS rules the same) ... */
+/* CTA Section */
+.cta {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.cta a {
+  background-color: #EBC536;
+  color: #333;
+  padding: 15px 30px;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 12px;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+  transition: background 0.3s ease;
+}
+
+.cta a:hover {
+  background-color: #FBAF36;
+}
 
 /* Community Section */
 .community-section {
@@ -241,7 +207,7 @@ footer {
   100% { transform: translateX(-50%); }
 }
 
-/* Mobile Responsiveness */
+/* Mobile Responsiveness - Fixed Header & Chart */
 @media (max-width: 768px) {
   header {
     height: auto;
@@ -249,23 +215,30 @@ footer {
     flex-direction: column;
     gap: 15px;
     font-size: 22px;
+    justify-content: center;
+    align-items: center;
   }
 
   header img {
-    width: 70%;
-    max-width: 250px;
+    width: 60%;
+    max-width: 200px;
     height: auto;
+    margin: 0 auto;
   }
 
   .chart-container {
-    max-width: 90%;
-    margin: 20px auto;
-    padding: 20px;
-    min-height: 400px;
+    max-width: 95%;
+    margin: 15px auto;
+    padding: 15px !important;
+    min-height: 75vh;
+    border-radius: 12px !important;
   }
 
   #leaderboardChart {
-    height: 400px !important;
+    height: auto !important;
+    min-height: 65vh;
+    width: 100% !important;
+    margin: 0;
   }
 
   .model-track img,
@@ -296,11 +269,11 @@ footer {
 @media (max-width: 480px) {
   .chart-container {
     padding: 15px;
-    min-height: 350px;
+    min-height: 80vh;
   }
 
   #leaderboardChart {
-    height: 300px !important;
+    min-height: 70vh;
   }
 
   .community-section,
