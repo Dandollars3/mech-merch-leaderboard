@@ -154,4 +154,29 @@ window.addEventListener('resize', () => {
     window.leaderboardChart.destroy();
     loadChartData();
   }
+// Add this right before your DOMContentLoaded ends
+function optimizeForMobile() {
+  const isMobile = window.innerWidth <= 768;
+  const canvas = document.getElementById('leaderboardChart');
+  
+  if (!canvas) return;
+  
+  // Mobile-specific adjustments
+  if (isMobile) {
+    canvas.height = Math.max(400, data.communities.length * 60);
+    
+    if (window.leaderboardChart) {
+      window.leaderboardChart.options.scales.y.ticks.font.size = 14;
+      window.leaderboardChart.options.scales.y.ticks.padding = 10;
+      window.leaderboardChart.options.barThickness = 20;
+      window.leaderboardChart.update();
+    }
+  }
+}
+
+// Add this event listener
+window.addEventListener('resize', optimizeForMobile);
+
+// Call it initially
+optimizeForMobile();
 });
