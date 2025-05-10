@@ -35,28 +35,17 @@ async function loadChartData() {
 }
 
 function renderChart(data) {
-  const container = document.getElementById('chart-container');
+  const isMobile = window.innerWidth <= 768;
   const canvas = document.getElementById('leaderboardChart');
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
+  const mobileHeight = Math.max(400, data.communities.length * 75);
+  
   // Canvas setup
-  canvas.style.minWidth = '300px';
   canvas.style.width = '100%';
-  canvas.style.height = isMobile ? 
-    `${Math.max(400, data.communities.length * 50)}px` : 
-    '600px';
+  canvas.style.height = isMobile ? `${mobileHeight}px` : '500px';
 
   const ctx = canvas.getContext('2d');
 
-  // Sort data
-  const sortedIndices = [...Array(data.communities.length).keys()]
-    .sort((a, b) => data.purchases[b] - data.purchases[a]);
-  
-  const sortedCommunities = sortedIndices.map(i => data.communities[i]);
-  const sortedPurchases = sortedIndices.map(i => data.purchases[i]);
-  const sortedColors = sortedIndices.map(i => data.colors[i]);
-
-  // Create or update chart
+  // Destroy existing chart
   if (window.leaderboardChart) {
     window.leaderboardChart.destroy();
   }
@@ -64,21 +53,27 @@ function renderChart(data) {
   window.leaderboardChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: sortedCommunities,
+      labels: data.communities,
       datasets: [{
         label: 'Number of Purchases',
-        data: sortedPurchases,
-        backgroundColor: sortedColors,
+        data: data.purchases,
+        backgroundColor: data.colors,
         borderRadius: 10,
-        barThickness: 'flex',
-        categoryPercentage: isMobile ? 0.6 : 0.8,
-        barPercentage: isMobile ? 0.8 : 0.9
+        barThickness: isMobile ? 20 : 40
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      aspectRatio: isMobile ? 0.8 : 1.5,
+      indexAxis: 'y',
+      layout: {
+        padding: isMobile ? { 
+          left: 25, 
+          right: 25, 
+          top: 25, 
+          bottom: 25 
+        } : {}
+      },
       animation: {
         duration: 2000,
         easing: 'easeOutQuart',
@@ -87,7 +82,29 @@ function renderChart(data) {
         animateScale: true,
         animateRotate: true
       },
-      indexAxis: 'y',
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: {
+            font: {
+              size: isMobile ? 12 : 14
+            },
+            count: isMobile ? 5 : 10
+          },
+          grid: { display: false }
+        },
+        y: {
+          ticks: {
+            font: {
+              size: isMobile ? 15 : 16,
+              weight: 'bold'
+            },
+            autoSkip: false,
+            padding: isMobile ? 15 : 5
+          },
+          grid: { display: false }
+        }
+      },
       plugins: {
         legend: { display: false },
         title: {
@@ -102,36 +119,20 @@ function renderChart(data) {
         tooltip: {
           enabled: !isMobile
         }
-      },
-      scales: {
-        x: {
-          beginAtZero: true,
-          grid: { display: false },
-          ticks: { 
-            font: { 
-              size: isMobile ? 12 : 14 
-            } 
-          }
-        },
-        y: {
-          ticks: { 
-            font: { 
-              size: isMobile ? 12 : 16,
-              weight: 'bold' 
-            },
-            mirror: true,
-            z: 1 
-          },
-          grid: { display: false }
-        }
-      },
-      interaction: {
-        mode: 'nearest',
-        axis: 'y',
-        intersect: false
       }
     }
   });
+
+  // Handle window resize
+  const resizeObserver = new ResizeObserver(() => {
+    if (window.leaderboardChart) {
+      const newMobileHeight = Math.max(400, data.communities.length * 75);
+      canvas.style.height = window.innerWidth <= 768 ? 
+        `${newMobileHeight}px` : '500px';
+      window.leaderboardChart.update();
+    }
+  });
+  resizeObserver.observe(canvas);
 }
 
 function highlightCommunity(community) {
@@ -147,36 +148,3 @@ function highlightCommunity(community) {
     card.style.borderRadius = '12px';
   }
 }
-
-// Handle window resize
-window.addEventListener('resize', () => {
-  if (window.leaderboardChart) {
-    window.leaderboardChart.destroy();
-    loadChartData();
-  }
-// Add this right before your DOMContentLoaded ends
-function optimizeForMobile() {
-  const isMobile = window.innerWidth <= 768;
-  const canvas = document.getElementById('leaderboardChart');
-  
-  if (!canvas) return;
-  
-  // Mobile-specific adjustments
-  if (isMobile) {
-    canvas.height = Math.max(400, data.communities.length * 60);
-    
-    if (window.leaderboardChart) {
-      window.leaderboardChart.options.scales.y.ticks.font.size = 14;
-      window.leaderboardChart.options.scales.y.ticks.padding = 10;
-      window.leaderboardChart.options.barThickness = 20;
-      window.leaderboardChart.update();
-    }
-  }
-}
-
-// Add this event listener
-window.addEventListener('resize', optimizeForMobile);
-
-// Call it initially
-optimizeForMobile();
-});
