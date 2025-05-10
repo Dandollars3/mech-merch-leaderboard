@@ -2,7 +2,22 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch('http://localhost:5000/leaderboard')
     .then(response => response.json())
     .then(data => {
-      const ctx = document.getElementById('leaderboardChart').getContext('2d');
+      const container = document.getElementById('chart-container');
+
+      // Optional: make chart container more mobile-friendly
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+      container.style.width = '100%';
+      container.style.overflowX = 'auto'; // For horizontal scroll on small screens
+
+      const canvas = document.getElementById('leaderboardChart');
+      canvas.style.minWidth = '300px';
+      canvas.style.width = '100%';
+      canvas.height = 400;
+
+      const ctx = canvas.getContext('2d');
 
       // Sort data from highest to lowest
       const sortedIndices = [...Array(data.communities.length).keys()]
@@ -25,65 +40,35 @@ document.addEventListener('DOMContentLoaded', () => {
           }]
         },
         options: {
-          // Animation configuration goes here inside options
           animation: {
             duration: 2000,
             easing: 'easeOutQuart',
-            delay: (context) => {
-              // Stagger the animation for each bar
-              return context.dataIndex * 200;
-            },
-            onComplete: () => {
-              console.log('Animation complete!');
-              // You could add visual effects here when animation finishes
-            },
-            animateScale: true,  // Adds zoom effect
-            animateRotate: true  // Adds slight rotation effect
+            delay: (context) => context.dataIndex * 200,
+            onComplete: () => console.log('Animation complete!'),
+            animateScale: true,
+            animateRotate: true
           },
           indexAxis: 'y',
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { 
-              display: false
-            },
+            legend: { display: false },
             title: {
               display: true,
               text: 'Community Purchases Leaderboard',
-              font: { 
-                size: 20,
-                weight: 'bold'
-              },
-              padding: {
-                top: 10,
-                bottom: 30
-              }
+              font: { size: 20, weight: 'bold' },
+              padding: { top: 10, bottom: 30 }
             }
           },
           scales: {
             x: {
               beginAtZero: true,
-              grid: {
-                display: false
-              },
-              ticks: { 
-                font: { 
-                  size: 14 
-                } 
-              }
+              grid: { display: false },
+              ticks: { font: { size: 14 } }
             },
             y: {
-              ticks: { 
-                font: { 
-                  size: 16, 
-                  weight: 'bold' 
-                },
-                mirror: true,
-                z: 1
-              },
-              grid: {
-                display: false
-              }
+              ticks: { font: { size: 16, weight: 'bold' }, mirror: true, z: 1 },
+              grid: { display: false }
             }
           }
         }
@@ -95,12 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.getElementById('refreshBtn').addEventListener('click', () => {
-  // Show loading state
   const btn = document.getElementById('refreshBtn');
   btn.disabled = true;
   btn.innerHTML = '<svg...> Refreshing...';
-  
-  // Reload chart
   loadChartData();
 });
 
@@ -108,18 +90,16 @@ async function loadChartData() {
   try {
     const response = await fetch('http://localhost:5000/leaderboard');
     const data = await response.json();
-    updateChart(data);
+    updateChart(data); // You’ll need to define this function to refresh chart dynamically
   } catch (error) {
     console.error('Error:', error);
   } finally {
-    // Reset button
     const btn = document.getElementById('refreshBtn');
     btn.disabled = false;
     btn.innerHTML = '<svg...> Refresh Data';
   }
 }
 
-// Add click handlers to community cards
 document.querySelectorAll('.comm-card').forEach(card => {
   card.addEventListener('click', function() {
     const community = this.querySelector('p').textContent;
@@ -128,19 +108,15 @@ document.querySelectorAll('.comm-card').forEach(card => {
 });
 
 function highlightCommunity(community) {
-  // Remove all highlights first
   document.querySelectorAll('.comm-card').forEach(card => {
     card.style.border = 'none';
   });
-  
-  // Highlight selected
+
   const card = [...document.querySelectorAll('.comm-card')]
     .find(c => c.querySelector('p').textContent === community);
-  
+
   if (card) {
     card.style.border = '3px solid #EF7F36';
     card.style.borderRadius = '12px';
   }
-  
-  // You could also filter the chart here if needed
 }
