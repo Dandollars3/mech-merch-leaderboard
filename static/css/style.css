@@ -5,20 +5,29 @@ body {
     background-color: #FAF8F6;
     color: #333;
     line-height: 1.6;
-  }
-  
+  }  
   /* Header */
-  header {
-    background: linear-gradient(90deg, #EF7F36, #FBAF36);
-    color: white;
-    padding: 30px 20px;
-    text-align: center;
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 1.5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
+header {
+  background: linear-gradient(90deg, #EF7F36, #FBAF36);
+  color: white;
+  padding: 20px 20px; /* Reduced from 30px */
+  text-align: center;
+  font-size: 28px;     /* Slightly smaller */
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Center layout */
+body {
+  text-align: center;
+}
+
+main, .chart-container, .models, .community-section, .cta {
+  margin: 0 auto;
+  max-width: 900px;
+}
+
   /* Chart container */
   .chart-container {
     max-width: 900px;
@@ -275,4 +284,36 @@ body {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 15px 10px;
+    font-size: 22px;
+  }
+
+  .chart-container, .models, .community-section {
+    padding: 15px 10px;
+    margin: 10px;
+  }
+
+  .model-slider img,
+  .model-track img {
+    height: 180px;
+  }
+
+  .cta a {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  #leaderboardChart {
+    height: 400px !important;
+  }
+
+  .refresh-btn {
+    flex-direction: column;
+    font-size: 14px;
+    padding: 8px 16px;
+  }
 }
