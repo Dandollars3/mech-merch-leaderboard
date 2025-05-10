@@ -59,6 +59,28 @@ main, .chart-container, .models, .community-section, .cta {
   padding: 10px;
 }
 
+/* Add this to your existing CSS */
+@media screen and (max-width: 768px) {
+  #chart-container {
+    padding: 10px 0;
+    margin: 0 -5px;
+    min-height: 80vh;
+    overflow-x: visible;
+  }
+
+  #leaderboardChart {
+    height: auto !important;
+    min-height: 70vh;
+    width: 100% !important;
+    margin: 0;
+  }
+
+  .chart-container {
+    padding: 15px !important;
+    border-radius: 12px !important;
+  }
+}
+
 /* CTA Section */
 .cta {
   text-align: center;
