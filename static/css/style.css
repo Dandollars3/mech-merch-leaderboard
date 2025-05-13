@@ -43,20 +43,30 @@ main, .chart-container, .models, .community-section, .cta {
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   position: relative;
-  min-height: 600px;
+  /* Set aspect ratio instead of fixed height */
+  aspect-ratio: 16/9;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
 #leaderboardChart {
   width: 100% !important;
-  height: 500px !important;
-  margin: 20px 0;
+  height: 100% !important;
+  margin: 0;
+  flex-grow: 1;
+  /* Important to prevent height loops */
+  min-height: 0;
 }
 
+/* Chart wrapper for better sizing control */
 .chart-wrapper {
   width: 100%;
-  max-width: 500px;
+  height: 100%;
   margin: auto;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* CTA Section */
@@ -229,15 +239,19 @@ footer {
   .chart-container {
     max-width: 95%;
     margin: 15px auto;
-    padding: 15px !important;
-    min-height: 75vh;
+    padding: 15px 10px !important; /* Reduced padding */
+    /* Adjust aspect ratio for mobile to make chart taller */
+    aspect-ratio: 5/8;
+    min-height: 380px;
+    max-height: 550px;
     border-radius: 12px !important;
   }
 
   #leaderboardChart {
-    height: auto !important;
-    min-height: 65vh;
     width: 100% !important;
+    height: 100% !important;
+    min-height: 0;
+    max-height: none;
     margin: 0;
   }
 
@@ -246,9 +260,22 @@ footer {
     height: 180px;
   }
 
+  .cta {
+    margin-top: 10px;
+  }
+  
   .cta a {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+
+  h1, h2 {
+    font-size: 1.3rem !important;
+    margin-bottom: 0.7rem;
+  }
+
+  p, .comm-card p {
+    font-size: 0.85rem;
   }
 
   .refresh-btn {
@@ -268,17 +295,20 @@ footer {
 
 @media (max-width: 480px) {
   .chart-container {
-    padding: 15px;
-    min-height: 80vh;
+    padding: 10px 5px;
+    /* Further adjust for smaller screens */
+    aspect-ratio: 4/7;
+    min-height: 320px;
+    max-height: 500px;
   }
 
   #leaderboardChart {
-    min-height: 70vh;
+    min-height: 0;
   }
 
   .community-section,
   .models {
-    padding: 2rem 1rem;
+    padding: 1.5rem 0.7rem;
   }
 
   .model-track img {

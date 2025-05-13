@@ -37,12 +37,6 @@ async function loadChartData() {
 function renderChart(data) {
   const isMobile = window.innerWidth <= 768;
   const canvas = document.getElementById('leaderboardChart');
-  const mobileHeight = Math.max(400, data.communities.length * 75);
-  
-  // Canvas setup
-  canvas.style.width = '100%';
-  canvas.style.height = isMobile ? `${mobileHeight}px` : '500px';
-
   const ctx = canvas.getContext('2d');
 
   // Destroy existing chart
@@ -57,9 +51,9 @@ function renderChart(data) {
       datasets: [{
         label: 'Number of Purchases',
         data: data.purchases,
-        backgroundColor: data.colors,
+        backgroundColor: data.colors || ['#1b1b1b','#246c9d','#2f3750','#237623','#616977'],
         borderRadius: 10,
-        barThickness: isMobile ? 20 : 40
+        barThickness: isMobile ? 18 : 40
       }]
     },
     options: {
@@ -68,11 +62,16 @@ function renderChart(data) {
       indexAxis: 'y',
       layout: {
         padding: isMobile ? { 
-          left: 25, 
-          right: 25, 
-          top: 25, 
-          bottom: 25 
-        } : {}
+          left: 5, 
+          right: 5, 
+          top: 5, 
+          bottom: 5 
+        } : {
+          left: 15, 
+          right: 15, 
+          top: 10, 
+          bottom: 10
+        }
       },
       animation: {
         duration: 2000,
@@ -87,20 +86,22 @@ function renderChart(data) {
           beginAtZero: true,
           ticks: {
             font: {
-              size: isMobile ? 12 : 14
+              size: isMobile ? 10 : 14
             },
-            count: isMobile ? 5 : 10
+            count: isMobile ? 4 : 10
           },
           grid: { display: false }
         },
         y: {
           ticks: {
             font: {
-              size: isMobile ? 15 : 16,
+              // Reduced font size for community names on mobile
+              size: isMobile ? 10 : 16,
               weight: 'bold'
             },
             autoSkip: false,
-            padding: isMobile ? 15 : 5
+            // Reduced padding to give more chart space
+            padding: isMobile ? 4 : 8
           },
           grid: { display: false }
         }
@@ -111,10 +112,10 @@ function renderChart(data) {
           display: true,
           text: 'Community Purchases Leaderboard',
           font: { 
-            size: isMobile ? 16 : 20,
+            size: isMobile ? 14 : 20,
             weight: 'bold' 
           },
-          padding: { top: 10, bottom: 30 }
+          padding: { top: 5, bottom: isMobile ? 10 : 20 }
         },
         tooltip: {
           enabled: !isMobile
@@ -122,17 +123,21 @@ function renderChart(data) {
       }
     }
   });
+  
+  // No resize observer - CSS handles this now
+}
 
-  // Handle window resize
-  const resizeObserver = new ResizeObserver(() => {
-    if (window.leaderboardChart) {
-      const newMobileHeight = Math.max(400, data.communities.length * 75);
-      canvas.style.height = window.innerWidth <= 768 ? 
-        `${newMobileHeight}px` : '500px';
-      window.leaderboardChart.update();
-    }
-  });
-  resizeObserver.observe(canvas);
+// Debounce function to prevent too many resize events
+function debounce(func, wait) {
+  let timeout;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      func.apply(context, args);
+    }, wait);
+  };
 }
 
 function highlightCommunity(community) {

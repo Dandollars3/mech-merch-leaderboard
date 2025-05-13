@@ -56,6 +56,9 @@
     fetch('/leaderboard')
       .then(r=>r.json())
       .then(data=>{
+        const isMobile = window.innerWidth <= 768;
+        const canvas = document.getElementById('leaderboardChart');
+        
         new Chart(
           document.getElementById('leaderboardChart').getContext('2d'),
           {
@@ -65,18 +68,46 @@
               datasets:[{
                 data: data.purchases,
                 backgroundColor: ['#1b1b1b','#246c9d','#2f3750','#237623','#616977'],
-                borderRadius:10, barThickness:40
+                borderRadius:10, 
+                barThickness: isMobile ? 18 : 40
               }]
             },
             options:{
-              indexAxis:'y', responsive:true,
+              indexAxis:'y', 
+              responsive:true,
+              maintainAspectRatio: false,
+              layout: {
+                padding: isMobile ? { 
+                  left: 5, 
+                  right: 5, 
+                  top: 5, 
+                  bottom: 5 
+                } : {}
+              },
               plugins:{
                 legend:{display:false},
-                title:{ display:true, text:'Community Purchases', font:{size:20} }
+                title:{ 
+                  display:true, 
+                  text:'Community Purchases', 
+                  font:{size: isMobile ? 14 : 20},
+                  padding: { top: 5, bottom: isMobile ? 10 : 20 }
+                }
               },
               scales:{
-                x:{ ticks:{font:{size:16}} },
-                y:{ ticks:{font:{size:18,weight:'bold'}} }
+                x:{ 
+                  ticks:{
+                    font:{size: isMobile ? 10 : 16},
+                    count: isMobile ? 4 : 10
+                  } 
+                },
+                y:{ 
+                  ticks:{
+                    // Reduced font size for community names on mobile
+                    font:{size: isMobile ? 10 : 18, weight:'bold'},
+                    // Reduced padding to give more chart space
+                    padding: isMobile ? 4 : 8
+                  }
+                }
               }
             }
           }
