@@ -1,119 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Merch Dashboard</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Merch Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header>
+      <img
+        src="{{ url_for('static', filename='images/logo.png') }}"
+        alt="Logo"
+        class="logo"
+      />
+    </header>
 
-  <header>
-    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
-  </header>
-
-  <main class="chart-container">
-    <canvas id="leaderboardChart"></canvas>
-    <div class="cta">
-      <a href="https://bit.ly/mech_merchandise" target="_blank">Purchase Mech Merch</a>
-    </div>
-  </main>
-
-  <section class="community-section">
-    <h2>Representing Communities</h2>
-    <div class="community-grid">
-      {% for img, name in [
-          ('aerospace.png','Aerospace'),
-          ('aircon.png','Air Con'),
-          ('automobile.png','Automobile'),
-          ('energy.png','Energy'),
-          ('manufacturing.png','Manufacturing')] %}
-      <div class="comm-card">
-        <img src="{{ url_for('static', filename='images/' ~ img) }}" alt="{{ name }}">
-        <p>{{ name }}</p>
+    <main class="chart-container">
+      <canvas id="leaderboardChart"></canvas>
+      <div class="cta">
+        <a href="https://bit.ly/mech_merchandise" target="_blank"
+          >Purchase Mech Merch</a
+        >
       </div>
-      {% endfor %}
-    </div>
-  </section>
+    </main>
 
-  <section class="models">
-    <h2>Our Models Rocking the Merch</h2>
-    <div class="model-strip">
-      <div class="model-track">
-        {% for i in range(1,7)|list + range(1,7)|list %}
-        <img src="{{ url_for('static', filename='images/model' ~ i ~ '.jpg') }}" alt="Model {{ i }}">
+    <section class="community-section">
+      <h2>Representing Communities</h2>
+      <div class="community-grid">
+        {% for img, name in [ ('aerospace.png','Aerospace'), ('aircon.png','Air
+        Con'), ('automobile.png','Automobile'), ('energy.png','Energy'),
+        ('manufacturing.png','Manufacturing')] %}
+        <div class="comm-card">
+          <img
+            src="{{ url_for('static', filename='images/' ~ img) }}"
+            alt="{{ name }}"
+          />
+          <p>{{ name }}</p>
+        </div>
         {% endfor %}
       </div>
+    </section>
+
+    <section class="models">
+      <h2>Our Models Rocking the Merch</h2>
+      <div class="model-strip">
+        <div class="model-track">
+          {% for i in range(1,7)|list + range(1,7)|list %}
+          <img
+            src="{{ url_for('static', filename='images/model' ~ i ~ '.jpg') }}"
+            alt="Model {{ i }}"
+            class="model-image"
+            data-id="{{ i if i <= 6 else i - 6 }}"
+          />
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <footer>&copy; 2025 Mech_Merch</footer>
+
+    <!-- Image Popup -->
+    <div class="image-popup-overlay" id="imagePopup">
+      <div class="image-popup-container">
+        <img src="" alt="Model Image" class="popup-image" id="popupImage" />
+        <div class="popup-close" id="popupClose">&times;</div>
+        <div class="popup-prev" id="popupPrev">&lsaquo;</div>
+        <div class="popup-next" id="popupNext">&rsaquo;</div>
+      </div>
     </div>
-  </section>
 
-  <footer>&copy; 2025 Mech_Merch</footer>
+    <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popup.js') }}"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch("/leaderboard")
+          .then((r) => r.json())
+          .then((data) => {
+            const isMobile = window.innerWidth <= 768;
+            const canvas = document.getElementById("leaderboardChart");
 
-  <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
-  <script>
-  document.addEventListener('DOMContentLoaded', ()=> {
-    fetch('/leaderboard')
-      .then(r=>r.json())
-      .then(data=>{
-        const isMobile = window.innerWidth <= 768;
-        const canvas = document.getElementById('leaderboardChart');
-        
-        new Chart(
-          document.getElementById('leaderboardChart').getContext('2d'),
-          {
-            type:'bar',
-            data:{
-              labels: data.communities,
-              datasets:[{
-                data: data.purchases,
-                backgroundColor: ['#1b1b1b','#246c9d','#2f3750','#237623','#616977'],
-                borderRadius:10, 
-                barThickness: isMobile ? 18 : 40
-              }]
-            },
-            options:{
-              indexAxis:'y', 
-              responsive:true,
-              maintainAspectRatio: false,
-              layout: {
-                padding: isMobile ? { 
-                  left: 5, 
-                  right: 5, 
-                  top: 5, 
-                  bottom: 5 
-                } : {}
-              },
-              plugins:{
-                legend:{display:false},
-                title:{ 
-                  display:true, 
-                  text:'Community Purchases', 
-                  font:{size: isMobile ? 14 : 20},
-                  padding: { top: 5, bottom: isMobile ? 10 : 20 }
-                }
-              },
-              scales:{
-                x:{ 
-                  ticks:{
-                    font:{size: isMobile ? 10 : 16},
-                    count: isMobile ? 4 : 10
-                  } 
+            new Chart(
+              document.getElementById("leaderboardChart").getContext("2d"),
+              {
+                type: "bar",
+                data: {
+                  labels: data.communities,
+                  datasets: [
+                    {
+                      data: data.purchases,
+                      backgroundColor: [
+                        "#1b1b1b",
+                        "#246c9d",
+                        "#2f3750",
+                        "#237623",
+                        "#616977",
+                      ],
+                      borderRadius: 10,
+                      barThickness: isMobile ? 18 : 40,
+                    },
+                  ],
                 },
-                y:{ 
-                  ticks:{
-                    // Reduced font size for community names on mobile
-                    font:{size: isMobile ? 10 : 18, weight:'bold'},
-                    // Reduced padding to give more chart space
-                    padding: isMobile ? 4 : 8
-                  }
-                }
+                options: {
+                  indexAxis: "y",
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  layout: {
+                    padding: isMobile
+                      ? {
+                          left: 5,
+                          right: 5,
+                          top: 5,
+                          bottom: 5,
+                        }
+                      : {},
+                  },
+                  plugins: {
+                    legend: { display: false },
+                    title: {
+                      display: true,
+                      text: "Community Purchases",
+                      font: { size: isMobile ? 14 : 20 },
+                      padding: { top: 5, bottom: isMobile ? 10 : 20 },
+                    },
+                  },
+                  scales: {
+                    x: {
+                      ticks: {
+                        font: { size: isMobile ? 10 : 16 },
+                        count: isMobile ? 4 : 10,
+                      },
+                    },
+                    y: {
+                      ticks: {
+                        // Reduced font size for community names on mobile
+                        font: { size: isMobile ? 10 : 18, weight: "bold" },
+                        // Reduced padding to give more chart space
+                        padding: isMobile ? 4 : 8,
+                      },
+                    },
+                  },
+                },
               }
-            }
-          }
-        );
+            );
+          });
       });
-  });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
