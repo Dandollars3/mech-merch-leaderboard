@@ -319,25 +319,24 @@ footer {
   right: 20px;
 }
 
+header {
+  height: auto;
+  padding: 15px 10px;
+  flex-direction: column;
+  gap: 15px;
+  font-size: 22px;
+  justify-content: center;
+  align-items: center;
+}
+
+header img {
+  width: 40%;
+  max-width: 100px;
+  height: auto;
+  margin: 0 auto;
+}
 /* Mobile Responsiveness - Fixed Header & Chart */
 @media (max-width: 768px) {
-  header {
-    height: auto;
-    padding: 15px 10px;
-    flex-direction: column;
-    gap: 15px;
-    font-size: 22px;
-    justify-content: center;
-    align-items: center;
-  }
-
-  header img {
-    width: 60%;
-    max-width: 200px;
-    height: auto;
-    margin: 0 auto;
-  }
-
   .chart-container {
     max-width: 95%;
     margin: 15px auto;
